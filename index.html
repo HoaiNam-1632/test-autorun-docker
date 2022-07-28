@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message</title>
+    <link href="/dist/output.css" rel="stylesheet">
+    <!-- <script defer src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script> -->
+</head>
+<style>
+    li {
+        color: blue;
+    }
+</style>
+<body>
+    <div class="border-2 border-black h-[700px] w-[400px] relative">
+        <ul id="messages" class="">
+            <!-- <li class="text-left flex bg-slate-300"><b class="px-1">Kelvin:</b> hello there</li>
+            <li class="text-right bg-blue-300">my name is ahihi<b class="px-1">:Peter</b></li>
+            <li class="text-left flex bg-slate-300"><b class="px-1">Kelvin:</b> what are you doing?</li>
+            <li class="text-right bg-blue-300">homework<b class="px-1">:Peter</b></li> -->
+        </ul>
+    </div>
+
+    <form id="chat-form">
+        <input id="chat-mes" class=" rounded-lg
+                    border-2 border-blue-400
+                    w-[400px] outline-none p-2" type="text">
+        <button id="send-chat" class="
+                         rounded-lg 
+                        w-[80px] h-[45px] bg-violet-500
+                        text-white" type="submit">
+            Send
+        </button>
+    </form>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io()
+
+    const chatForm = document.querySelector('#chat-form')
+    const chatMes = document.querySelector('#chat-mes')
+
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        const message = chatMes.value
+        socket.emit('on-chat', {
+            message: message
+        })
+        chatMes.value = ""
+    })
+
+    const messages = document.querySelector('#messages')
+    socket.on('user-chat', (message) => {
+        const chatItem = document.createElement('li')
+        chatItem.textContent = message.message
+
+        messages.appendChild(chatItem)
+    })
+</script>
+
+</html>
